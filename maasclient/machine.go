@@ -85,6 +85,7 @@ type MachineDeployer interface {
 	SetOSSystem(ossytem string) MachineDeployer
 	SetUserData(userdata string) MachineDeployer
 	SetDistroSeries(distroseries string) MachineDeployer
+	SetEphemeralDeploy(ephemeral bool) MachineDeployer
 	Deploy(ctx context.Context) (Machine, error)
 }
 
@@ -235,6 +236,15 @@ func (m *machine) SetUserData(userdata string) MachineDeployer {
 
 func (m *machine) SetDistroSeries(distroseries string) MachineDeployer {
 	m.params.Set(DistroSeriesKey, distroseries)
+	return m
+}
+
+func (m *machine) SetEphemeralDeploy(ephemeral bool) MachineDeployer {
+	if ephemeral {
+		m.params.Set(EphemeralDeployKey, TrueKey)
+	} else {
+		m.params.Set(EphemeralDeployKey, "false")
+	}
 	return m
 }
 
