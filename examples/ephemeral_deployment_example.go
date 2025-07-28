@@ -49,7 +49,7 @@ func main() {
 	fmt.Println("\n=== Example completed ===")
 }
 
-func deployMachine(client maasclient.Clientset, ctx context.Context, ephemeral bool) (maasclient.Machine, error) {
+func deployMachine(client maasclient.ClientSetInterface, ctx context.Context, ephemeral bool) (maasclient.Machine, error) {
 	// Allocate a machine
 	fmt.Printf("Allocating machine...\n")
 	machine, err := client.Machines().Allocator().Allocate(ctx)
