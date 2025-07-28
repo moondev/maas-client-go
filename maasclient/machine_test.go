@@ -145,6 +145,34 @@ func TestClient_DeployMachine(t *testing.T) {
 		releaseMachine(res)
 	})
 
+	t.Run("ephemeral-deploy", func(t *testing.T) {
+		res, err := c.Machines().Allocator().Allocate(ctx)
+		if err != nil {
+			t.Fatal("Machine didn't allocate")
+		}
+		assert.NotNil(t, res)
+		assert.NotEmpty(t, res.SystemID())
+
+		res, err = res.Modifier().SetSwapSize(0).Update(ctx)
+		assert.Nil(t, err)
+
+		_, err = res.Deployer().
+			SetOSSystem("custom").
+			SetDistroSeries("u-1804-0-k-11915-0").
+			SetEphemeralDeploy(true).
+			Deploy(ctx)
+		assert.Nil(t, err, "expecting nil error")
+		assert.NotNil(t, res)
+
+		assert.Equal(t, res.OSSystem(), "custom")
+		assert.Equal(t, res.DistroSeries(), "u-1804-0-k-11915-0")
+
+		// Give me a few seconds before cleaning up
+		time.Sleep(15 * time.Second)
+
+		releaseMachine(res)
+	})
+
 }
 
 func TestClient_UpdateMachine(t *testing.T) {
