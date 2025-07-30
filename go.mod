@@ -1,4 +1,4 @@
-module github.com/spectrocloud/maas-client-go
+module github.com/moondev/maas-client-go
 
 go 1.15
 
